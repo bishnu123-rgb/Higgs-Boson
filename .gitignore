@@ -1,0 +1,17 @@
+# Data
+data/
+*.csv
+*.npy
+
+# Results
+results/
+
+# Python
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Virtual environment
+venv/
