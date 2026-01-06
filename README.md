@@ -54,7 +54,7 @@ Higgs-Boson/
 └── README.md
 ```
 
-## Data Exploration## Overview
+## Data Exploration
 
 Exploratory analysis was conducted to understand the structure and characteristics of the dataset. This included examining feature distributions, identifying class imbalance between signal and background events, and analysing the presence of encoded missing values (`-999`), particularly in jet-related variables.
 
