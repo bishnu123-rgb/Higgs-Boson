@@ -68,135 +68,134 @@ Higgs-Boson/
 │
 ├── requirements.txt
 └── README.md
-Data Exploration
+
+## Data Exploration
+
 Exploratory analysis was performed to gain insight into:
 
-Dataset structure and feature distributions
+- Dataset structure and feature distributions  
+- Class imbalance between signal and background events  
+- Encoded missing values (`-999`) common in jet-related features  
+- Feature correlations motivating the use of ensemble tree-based models  
 
-Class imbalance between signal and background events
+### Visualisations Include
 
-Encoded missing values (-999) common in jet-related features
+- Class distribution plots  
+- Feature histograms  
+- Correlation heatmaps (random feature subsets)  
 
-Feature correlations motivating the use of ensemble tree-based models
+---
 
-Visualisations Include
-Class distribution plots
+## Preprocessing
 
-Feature histograms
-
-Correlation heatmaps (random feature subsets)
-
-Preprocessing
 Key preprocessing steps include:
 
-Label encoding (b → 0, s → 1)
+- Label encoding (`b → 0`, `s → 1`)  
+- Replacement of encoded missing values (`-999 → NaN`)  
+- Median imputation to ensure robustness against skewed distributions  
+- Removal of non-numeric features  
+- Stratified train–test split (80/20)  
+- Feature scaling using `StandardScaler` (for Logistic Regression)  
+- Handling class imbalance using class weights  
 
-Replacement of encoded missing values (-999 → NaN)
+All processed datasets are saved to disk to ensure **reproducibility and consistency** across models.
 
-Median imputation to ensure robustness against skewed distributions
+---
 
-Removal of non-numeric features
+## Models Implemented
 
-Stratified train–test split (80/20)
+### 1. Logistic Regression (Baseline)
 
-Feature scaling using StandardScaler (for Logistic Regression)
+- Used as an interpretable baseline model  
+- Trained on scaled features  
+- Handles class imbalance via balanced class weights  
+- Serves as a reference point for more complex models  
 
-Handling class imbalance using class weights
+### 2. Random Forest
 
-All processed datasets are saved to disk to ensure reproducibility and consistency across models.
+- Ensemble of decision trees using bagging  
+- Captures non-linear feature interactions  
+- Robust to noise and overfitting  
+- Enables feature importance analysis  
 
-Models Implemented
-1. Logistic Regression (Baseline)
-Used as an interpretable baseline model
+### 3. XGBoost
 
-Trained on scaled features
+- Gradient boosting ensemble model  
+- Optimised for imbalanced classification using `scale_pos_weight`  
+- Sequential learning to correct previous errors  
+- Achieves the strongest overall performance  
 
-Handles class imbalance via balanced class weights
+---
 
-Serves as a reference point for more complex models
+## Evaluation Metrics
 
-2. Random Forest
-Ensemble of decision trees using bagging
-
-Captures non-linear feature interactions
-
-Robust to noise and overfitting
-
-Enables feature importance analysis
-
-3. XGBoost
-Gradient boosting ensemble model
-
-Optimised for imbalanced classification using scale_pos_weight
-
-Sequential learning to correct previous errors
-
-Achieves the strongest overall performance
-
-Evaluation Metrics
 Given the class imbalance, evaluation focuses on:
 
-Precision
+- Precision  
+- Recall  
+- F1-score  
+- ROC-AUC  
 
-Recall
+### Additional Visual Diagnostics
 
-F1-score
+- Confusion matrices  
+- ROC curves  
+- Precision–Recall curves  
+- Cross-model ROC comparison  
 
-ROC-AUC
+---
 
-Additional Visual Diagnostics
-Confusion matrices
+## Model Performance Summary
 
-ROC curves
-
-Precision–Recall curves
-
-Cross-model ROC comparison
-
-Model Performance Summary
-Model	Accuracy	Precision	Recall	F1-score	ROC-AUC
-Logistic Regression	0.9619	0.9078	0.9891	0.9467	0.9946
-Random Forest	0.9995	0.9999	0.9986	0.9993	~1.000
-XGBoost	0.99998	0.99995	0.99998	0.99996	~1.000
+| Model               | Accuracy | Precision | Recall | F1-score | ROC-AUC |
+|--------------------|----------|-----------|--------|----------|---------|
+| Logistic Regression | 0.9619   | 0.9078    | 0.9891 | 0.9467   | 0.9946  |
+| Random Forest       | 0.9995   | 0.9999    | 0.9986 | 0.9993   | ~1.000  |
+| XGBoost             | 0.99998  | 0.99995   | 0.99998| 0.99996  | ~1.000  |
 
 Ensemble-based models significantly outperform the linear baseline, highlighting their ability to capture complex physics-driven relationships.
 
-Key Findings
-Logistic Regression achieves strong recall but has limited expressive capacity
+---
 
-Random Forest and XGBoost achieve near-perfect classification performance
+## Key Findings
 
-Ensemble models are highly effective for rare-event detection
+- Logistic Regression achieves strong recall but has limited expressive capacity  
+- Random Forest and XGBoost achieve near-perfect classification performance  
+- Ensemble models are highly effective for rare-event detection  
+- Proper preprocessing and metric selection are critical for reliable evaluation  
 
-Proper preprocessing and metric selection are critical for reliable evaluation
+---
 
-Technologies Used
-Python
+## Technologies Used
 
-NumPy, Pandas
+- Python  
+- NumPy, Pandas  
+- Scikit-learn  
+- XGBoost  
+- Matplotlib, Seaborn  
+- Jupyter Notebook  
+- Git & GitHub  
 
-Scikit-learn
+---
 
-XGBoost
+## Notes on Generalisation
 
-Matplotlib, Seaborn
-
-Jupyter Notebook
-
-Git & GitHub
-
-Notes on Generalisation
 While ensemble models achieved near-perfect scores, further validation using:
 
-Cross-validation
-
-Independent test sets
+- Cross-validation  
+- Independent test sets  
 
 would be required in real experimental deployments to fully confirm generalisation performance.
 
-Author
-Bishnu Parajuli
-Final Year AI Coursework Project
+---
 
-License
-This project is intended for academic and educational purposes only.
+## Author
+
+**Bishnu Parajuli**  
+Final Year AI Coursework Project  
+
+---
+
+## License
+
+This project is intended for **academic and educational purposes only**.
