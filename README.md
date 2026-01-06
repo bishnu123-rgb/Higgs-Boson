@@ -2,148 +2,83 @@
 
 ## Overview
 
-This project applies machine learning techniques to the problem of **Higgs boson event detection** using simulated collision data from the **ATLAS Higgs Machine Learning Challenge (2014)**.
+This project applies machine learning techniques to the problem of Higgs boson event detection using simulated collision data from the ATLAS Higgs Machine Learning Challenge (2014). The objective is to distinguish rare Higgs (signal) events from dominant background processes by learning patterns from high-dimensional physics features.
 
-The primary objective is to distinguish rare **Higgs (signal)** events from dominant **background** processes by learning patterns within high-dimensional physics-derived features.
-
-The project implements a complete **end-to-end machine learning pipeline**, including:
-
-- Data exploration and preprocessing  
-- Handling class imbalance and encoded missing values  
-- Model training using multiple supervised learning algorithms  
-- Evaluation using metrics suitable for imbalanced datasets  
-- Comparative analysis and visualisation of model performance  
-
----
+The work follows a complete end-to-end machine learning pipeline, including data exploration, preprocessing, model training, evaluation, and comparative analysis across multiple algorithms.
 
 ## Dataset
 
-**Source:** ATLAS Higgs Machine Learning Challenge 2014 (CERN Open Data)
+Source: ATLAS Higgs Machine Learning Challenge 2014 (CERN Open Data)
 
-- **Events:** ~818,000 simulated proton–proton collisions  
-- **Features:** 30 numerical physics-derived variables  
-- **Target classes:**
-  - `s` → Higgs (signal)  
+- Approximately 818,000 simulated proton–proton collision events  
+- 30 numerical physics-derived features  
+- Target classes:
+  - `s` → Higgs (signal)
   - `b` → Background  
 
-### Key Challenges
-
-- Severe class imbalance  
-- Missing measurements encoded as `-999`  
-- High-dimensional and non-linear feature interactions  
-
----
+Key challenges associated with the dataset include severe class imbalance, missing measurements encoded as `-999`, and complex non-linear feature interactions.
 
 ## Project Structure
 
-```text
 Higgs-Boson/
 │
 ├── notebooks/
-│   ├── 01_data_exploration.ipynb
-│   ├── 02_preprocessing.ipynb
-│   ├── 03_logistic_regression.ipynb
-│   ├── 04_random_forest.ipynb
-│   ├── 05_xgboost.ipynb
-│   └── 06_model_comparison.ipynb
+│ ├── 01_data_exploration.ipynb
+│ ├── 02_preprocessing.ipynb
+│ ├── 03_logistic_regression.ipynb
+│ ├── 04_random_forest.ipynb
+│ ├── 05_xgboost.ipynb
+│ └── 06_model_comparison.ipynb
 │
 ├── data/
-│   ├── X_train_scaled.npy
-│   ├── X_test_scaled.npy
-│   ├── X_train_unscaled.npy
-│   ├── X_test_unscaled.npy
-│   ├── y_train.npy
-│   └── y_test.npy
+│ ├── X_train_scaled.npy
+│ ├── X_test_scaled.npy
+│ ├── X_train_unscaled.npy
+│ ├── X_test_unscaled.npy
+│ ├── y_train.npy
+│ └── y_test.npy
 │
 ├── results/
-│   ├── figures/
-│   │   ├── lr_confusion_matrix.png
-│   │   ├── rf_confusion_matrix.png
-│   │   ├── xgb_confusion_matrix.png
-│   │   ├── *_roc_curve.png
-│   │   ├── *_pr_curve.png
-│   │   └── model_comparison_bar.png
-│   ├── model_comparison.csv
-│   └── roc_comparison.png
+│ ├── figures/
+│ ├── model_comparison.csv
+│ └── roc_comparison.png
 │
 ├── requirements.txt
 └── README.md
 
 ## Data Exploration
 
-Exploratory analysis was performed to gain insight into:
+Exploratory analysis was conducted to understand the structure and characteristics of the dataset. This included examining feature distributions, identifying class imbalance between signal and background events, and analysing the presence of encoded missing values (`-999`), particularly in jet-related variables.
 
-- Dataset structure and feature distributions  
-- Class imbalance between signal and background events  
-- Encoded missing values (`-999`) common in jet-related features  
-- Feature correlations motivating the use of ensemble tree-based models  
+Correlation analysis on subsets of numerical features revealed complex interdependencies, motivating the use of ensemble tree-based models capable of capturing non-linear relationships.
 
-### Visualisations Include
-
-- Class distribution plots  
-- Feature histograms  
-- Correlation heatmaps (random feature subsets)  
-
----
+Visual outputs include class distribution plots, feature histograms, and correlation heatmaps.
 
 ## Preprocessing
 
-Key preprocessing steps include:
+The preprocessing pipeline was designed to prepare the data for robust and fair model training. Target labels were encoded numerically (`b → 0`, `s → 1`). Encoded missing values (`-999`) were replaced with `NaN` and imputed using the median of each feature to reduce sensitivity to skewed distributions and outliers.
 
-- Label encoding (`b → 0`, `s → 1`)  
-- Replacement of encoded missing values (`-999 → NaN`)  
-- Median imputation to ensure robustness against skewed distributions  
-- Removal of non-numeric features  
-- Stratified train–test split (80/20)  
-- Feature scaling using `StandardScaler` (for Logistic Regression)  
-- Handling class imbalance using class weights  
+Non-numeric features were removed, and the dataset was split into training and test sets using a stratified 80/20 split to preserve class proportions. Feature scaling using `StandardScaler` was applied where required, and class imbalance was addressed using class weighting strategies.
 
-All processed datasets are saved to disk to ensure **reproducibility and consistency** across models.
-
----
+All processed datasets were saved to disk to ensure reproducibility and consistent use across models.
 
 ## Models Implemented
 
-### 1. Logistic Regression (Baseline)
+### Logistic Regression
 
-- Used as an interpretable baseline model  
-- Trained on scaled features  
-- Handles class imbalance via balanced class weights  
-- Serves as a reference point for more complex models  
+Logistic Regression was implemented as a baseline classifier due to its simplicity and interpretability. The model was trained on scaled features and incorporated balanced class weights to address class imbalance. While computationally efficient, its linear decision boundary limits its ability to model complex interactions.
 
-### 2. Random Forest
+### Random Forest
 
-- Ensemble of decision trees using bagging  
-- Captures non-linear feature interactions  
-- Robust to noise and overfitting  
-- Enables feature importance analysis  
+Random Forest was used as an ensemble learning method based on bagging. By combining multiple decision trees, the model effectively captures non-linear feature interactions and demonstrates strong robustness to noise and overfitting. Feature importance analysis provides additional interpretability.
 
-### 3. XGBoost
+### XGBoost
 
-- Gradient boosting ensemble model  
-- Optimised for imbalanced classification using `scale_pos_weight`  
-- Sequential learning to correct previous errors  
-- Achieves the strongest overall performance  
-
----
+XGBoost, a gradient boosting algorithm, was employed to further improve performance. The model was optimised for imbalanced classification using `scale_pos_weight` and trained with regularisation and subsampling strategies. Among all models, XGBoost achieved the strongest overall performance.
 
 ## Evaluation Metrics
 
-Given the class imbalance, evaluation focuses on:
-
-- Precision  
-- Recall  
-- F1-score  
-- ROC-AUC  
-
-### Additional Visual Diagnostics
-
-- Confusion matrices  
-- ROC curves  
-- Precision–Recall curves  
-- Cross-model ROC comparison  
-
----
+Given the class imbalance, evaluation focused on precision, recall, F1-score, and ROC-AUC rather than accuracy alone. Model behaviour was further analysed using confusion matrices, ROC curves, precision–recall curves, and cross-model ROC comparisons.
 
 ## Model Performance Summary
 
@@ -153,49 +88,25 @@ Given the class imbalance, evaluation focuses on:
 | Random Forest       | 0.9995   | 0.9999    | 0.9986 | 0.9993   | ~1.000  |
 | XGBoost             | 0.99998  | 0.99995   | 0.99998| 0.99996  | ~1.000  |
 
-Ensemble-based models significantly outperform the linear baseline, highlighting their ability to capture complex physics-driven relationships.
-
----
+The ensemble-based models significantly outperform the linear baseline, demonstrating their ability to learn complex, physics-driven relationships within the data.
 
 ## Key Findings
 
-- Logistic Regression achieves strong recall but has limited expressive capacity  
-- Random Forest and XGBoost achieve near-perfect classification performance  
-- Ensemble models are highly effective for rare-event detection  
-- Proper preprocessing and metric selection are critical for reliable evaluation  
-
----
+Logistic Regression provides strong recall but limited expressive capacity. Random Forest and XGBoost achieve near-perfect classification performance, highlighting the effectiveness of ensemble methods for rare-event detection. The results also emphasise the importance of careful preprocessing and appropriate evaluation metrics.
 
 ## Technologies Used
 
-- Python  
-- NumPy, Pandas  
-- Scikit-learn  
-- XGBoost  
-- Matplotlib, Seaborn  
-- Jupyter Notebook  
-- Git & GitHub  
-
----
+Python, NumPy, Pandas, Scikit-learn, XGBoost, Matplotlib, Seaborn, Jupyter Notebook, Git, and GitHub.
 
 ## Notes on Generalisation
 
-While ensemble models achieved near-perfect scores, further validation using:
-
-- Cross-validation  
-- Independent test sets  
-
-would be required in real experimental deployments to fully confirm generalisation performance.
-
----
+Although ensemble models achieved near-perfect scores on the test set, additional validation using cross-validation or independent test datasets would be required in real experimental settings to fully assess generalisation performance.
 
 ## Author
 
-**Bishnu Parajuli**  
-Final Year AI Coursework Project  
-
----
+Bishnu Parajuli  
+Final Year AI Coursework Project
 
 ## License
 
-This project is intended for **academic and educational purposes only**.
+This project is intended for academic and educational purposes only.
