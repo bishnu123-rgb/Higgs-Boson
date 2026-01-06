@@ -204,8 +204,7 @@ While ensemble models achieved near-perfect scores, further validation using:
 
 Cross-validation
 
-Independent test sets
-would be required in real experimental deployments to fully confirm generalisation performance.
+Independent test sets would be required in real experimental deployments to fully confirm generalisation performance.
 
 Author
 
