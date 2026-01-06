@@ -20,28 +20,35 @@ Key challenges associated with the dataset include severe class imbalance, missi
 
 ## Project Structure
 
+```text
 Higgs-Boson/
 │
 ├── notebooks/
-│ ├── 01_data_exploration.ipynb
-│ ├── 02_preprocessing.ipynb
-│ ├── 03_logistic_regression.ipynb
-│ ├── 04_random_forest.ipynb
-│ ├── 05_xgboost.ipynb
-│ └── 06_model_comparison.ipynb
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_preprocessing.ipynb
+│   ├── 03_logistic_regression.ipynb
+│   ├── 04_random_forest.ipynb
+│   ├── 05_xgboost.ipynb
+│   └── 06_model_comparison.ipynb
 │
 ├── data/
-│ ├── X_train_scaled.npy
-│ ├── X_test_scaled.npy
-│ ├── X_train_unscaled.npy
-│ ├── X_test_unscaled.npy
-│ ├── y_train.npy
-│ └── y_test.npy
+│   ├── X_train_scaled.npy
+│   ├── X_test_scaled.npy
+│   ├── X_train_unscaled.npy
+│   ├── X_test_unscaled.npy
+│   ├── y_train.npy
+│   └── y_test.npy
 │
 ├── results/
-│ ├── figures/
-│ ├── model_comparison.csv
-│ └── roc_comparison.png
+│   ├── figures/
+│   │   ├── lr_confusion_matrix.png
+│   │   ├── rf_confusion_matrix.png
+│   │   ├── xgb_confusion_matrix.png
+│   │   ├── *_roc_curve.png
+│   │   ├── *_pr_curve.png
+│   │   └── model_comparison_bar.png
+│   ├── model_comparison.csv
+│   └── roc_comparison.png
 │
 ├── requirements.txt
 └── README.md
